@@ -6,12 +6,18 @@ import '../auth/auth_service.dart';
 import '../components/my_button.dart';
 import '../components/my_text_field.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key, required this.onPress});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key, required this.onPress});
 
   final void Function()? onPress;
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailEditingController = TextEditingController();
+
   TextEditingController passwordEditingController = TextEditingController();
 
   late BuildContext _context;
@@ -39,8 +45,18 @@ class LoginScreen extends StatelessWidget {
               MyButton(label: 'Login', onTap: login),
               const SizedBox(height: 25),
               ElevatedButton(
-                onPressed: onPress,
+                onPressed: widget.onPress,
                 child: const Text('go to Regist'),
+              ),
+              const SizedBox(height: 25),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    emailEditingController.text = 'toyoda@test.com';
+                    passwordEditingController.text = 'password';
+                  });
+                },
+                child: const Text('Dummy'),
               ),
             ],
           ),
@@ -57,6 +73,8 @@ class LoginScreen extends StatelessWidget {
       await authService.signInWithEmailAndPassword(email: emailEditingController.text, password: passwordEditingController.text);
     } catch (e) {
       await showDialog(
+
+          ///TODO 変更できない
           context: _context,
           builder: (context) {
             return AlertDialog(title: Text(e.toString()));
