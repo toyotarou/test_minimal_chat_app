@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../auth/auth_service.dart';
 import '../components/my_button.dart';
 import '../components/my_text_field.dart';
 
@@ -14,13 +15,17 @@ class RegisterScreen extends StatelessWidget {
   TextEditingController passwordEditingController = TextEditingController();
   TextEditingController confirmPasswordEditingController = TextEditingController();
 
+  late BuildContext _context;
+
   ///
   @override
   Widget build(BuildContext context) {
+    _context = context;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
-        child: Center(
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -48,5 +53,29 @@ class RegisterScreen extends StatelessWidget {
   }
 
   ///
-  void register() {}
+  Future<void> register() async {
+    final authService = AuthService();
+
+    if (passwordEditingController.text == confirmPasswordEditingController.text) {
+      try {
+        await authService.signUpWithEmailAndPassword(email: emailEditingController.text, password: passwordEditingController.text);
+      } catch (e) {
+        await showDialog(
+
+            ///TODO 変更できない
+            context: _context,
+            builder: (context) {
+              return AlertDialog(title: Text(e.toString()));
+            });
+      }
+    } else {
+      await showDialog(
+
+          ///TODO 変更できない
+          context: _context,
+          builder: (context) {
+            return AlertDialog(title: Text('password, confirm password, not match'));
+          });
+    }
+  }
 }
