@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../components/my_button.dart';
@@ -26,20 +25,20 @@ class RegisterScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.message, size: 60, color: Theme.of(context).colorScheme.primary),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Text('Account Create', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 16)),
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
               MyTextField(hintText: 'email', controller: emailEditingController),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               MyTextField(hintText: 'password', controller: passwordEditingController),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               MyTextField(hintText: 'confirm password', controller: confirmPasswordEditingController),
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
               MyButton(label: 'Register', onTap: register),
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
               ElevatedButton(
                 onPressed: onPress,
-                child: Text('go to Login'),
+                child: const Text('go to Login'),
               ),
             ],
           ),
