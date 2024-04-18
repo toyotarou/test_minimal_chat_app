@@ -74,7 +74,7 @@ class RegisterScreen extends StatelessWidget {
           ///TODO 変更できない
           context: _context,
           builder: (context) {
-            return AlertDialog(title: Text('password, confirm password, not match'));
+            return const AlertDialog(title: Text('password, confirm password, not match'));
           });
     }
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../auth/auth_service.dart';
+import '../components/my_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,16 +10,8 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('HomeScreen'),
-        actions: [
-          IconButton(
-            onPressed: logout,
-            icon: const Icon(Icons.close),
-          ),
-        ],
       ),
+      drawer: const MyDrawer(),
     );
   }
-
-  ///
-  void logout() => AuthService().signOut();
 }
