@@ -6,31 +6,66 @@ import '../components/my_text_field.dart';
 import '../services/auth/auth_service.dart';
 import '../services/chat/chat_service.dart';
 
-class ChatScreen extends StatelessWidget {
-  ChatScreen({super.key, required this.receiverId, required this.receiverEmail});
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key, required this.receiverId, required this.receiverEmail});
 
   final String receiverId;
   final String receiverEmail;
 
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController messageEditingController = TextEditingController();
 
   final ChatService _chatService = ChatService();
 
   final AuthService _authService = AuthService();
 
+  FocusNode focusNode = FocusNode();
+
+  ScrollController scrollController = ScrollController();
+
+  ///
+  @override
+  void initState() {
+    super.initState();
+
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        Future.delayed(const Duration(milliseconds: 500), scrollDown);
+      }
+    });
+
+    Future.delayed(const Duration(milliseconds: 500), scrollDown);
+  }
+
+  ///
+  @override
+  void dispose() {
+    focusNode.dispose();
+
+    super.dispose();
+  }
+
+  ///
+  void scrollDown() =>
+      scrollController.animateTo(scrollController.position.maxScrollExtent, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+
   ///
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(title: Text(receiverEmail), backgroundColor: Colors.transparent, foregroundColor: Colors.grey, elevation: 0),
+      appBar: AppBar(title: Text(widget.receiverEmail), backgroundColor: Colors.transparent, foregroundColor: Colors.grey, elevation: 0),
       body: Column(children: [Expanded(child: _buildMessageList()), _buildUserInput(), const SizedBox(height: 20)]),
     );
   }
 
   ///
   Future<void> sendMessage() async {
-    await _chatService.sendMessage(receiverId: receiverId, message: messageEditingController.text);
+    await _chatService.sendMessage(receiverId: widget.receiverId, message: messageEditingController.text);
 
     messageEditingController.clear();
   }
@@ -40,7 +75,7 @@ class ChatScreen extends StatelessWidget {
     final senderId = _authService.getCurrentUser()!.uid;
 
     return StreamBuilder(
-      stream: _chatService.getMessages(receiverId: receiverId, senderId: senderId),
+      stream: _chatService.getMessages(receiverId: widget.receiverId, senderId: senderId),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text('error');
@@ -50,7 +85,10 @@ class ChatScreen extends StatelessWidget {
           return const Text('Loading..');
         }
 
-        return ListView(children: snapshot.data!.docs.map((doc) => _buildMessageListItem(doc: doc)).toList());
+        return ListView(
+          controller: scrollController,
+          children: snapshot.data!.docs.map((doc) => _buildMessageListItem(doc: doc)).toList(),
+        );
       },
     );
   }
@@ -76,7 +114,7 @@ class ChatScreen extends StatelessWidget {
   Widget _buildUserInput() {
     return Row(
       children: [
-        Expanded(child: MyTextField(controller: messageEditingController, hintText: 'message')),
+        Expanded(child: MyTextField(controller: messageEditingController, hintText: 'message', focusNode: focusNode)),
         DecoratedBox(
           decoration: BoxDecoration(color: Colors.orangeAccent.withOpacity(0.5), shape: BoxShape.circle),
           child: IconButton(onPressed: sendMessage, icon: const Icon(Icons.arrow_upward)),
