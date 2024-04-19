@@ -68,6 +68,8 @@ class _ChatScreenState extends State<ChatScreen> {
     await _chatService.sendMessage(receiverId: widget.receiverId, message: messageEditingController.text);
 
     messageEditingController.clear();
+
+    scrollDown();
   }
 
   ///
