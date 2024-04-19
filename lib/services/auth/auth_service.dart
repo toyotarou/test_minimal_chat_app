@@ -34,4 +34,7 @@ class AuthService {
       throw Exception(e.code);
     }
   }
+
+  ///
+  User? getCurrentUser() => _auth.currentUser;
 }

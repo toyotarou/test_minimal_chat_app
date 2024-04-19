@@ -2,12 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:test_minimal_chat_app/screens/chat_screen.dart';
+import 'package:test_minimal_chat_app/services/auth/auth_service.dart';
 
 import '../components/my_drawer.dart';
 import '../components/user_tile.dart';
-
-// import '../services/auth/auth_service.dart';
-//
 
 import '../services/chat/chat_service.dart';
 
@@ -16,8 +14,7 @@ class HomeScreen extends StatelessWidget {
 
   final ChatService _chatService = ChatService();
 
-  // AuthService _authService = AuthService();
-  //
+  final AuthService _authService = AuthService();
 
   late BuildContext _context;
 
@@ -59,18 +56,20 @@ class HomeScreen extends StatelessWidget {
 
   ///
   Widget _buildUserListItem({required Map<String, dynamic> userData}) {
-    return UserTile(
-      text: userData['email'],
-      onTap: () {
-        Navigator.push(
-          _context,
-          MaterialPageRoute(
-            builder: (context) => ChatScreen(
-              email: userData['email'],
+    if (userData['email'] == _authService.getCurrentUser()!.email) {
+      return Container();
+    } else {
+      return UserTile(
+        text: userData['email'],
+        onTap: () {
+          Navigator.push(
+            _context,
+            MaterialPageRoute(
+              builder: (context) => ChatScreen(receiverId: userData['uid'], receiverEmail: userData['email']),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    }
   }
 }
