@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:test_minimal_chat_app/components/chat_bubble.dart';
 import 'package:test_minimal_chat_app/components/my_text_field.dart';
 
 import '../services/auth/auth_service.dart';
@@ -24,15 +25,12 @@ class ChatScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(receiverEmail),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-        child: Column(
-          children: [
-            Expanded(child: _buildMessageList()),
-            _buildUserInput(),
-            const SizedBox(height: 20),
-          ],
-        ),
+      body: Column(
+        children: [
+          Expanded(child: _buildMessageList()),
+          _buildUserInput(),
+          const SizedBox(height: 20),
+        ],
       ),
     );
   }
@@ -81,7 +79,10 @@ class ChatScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text(data['message']),
+          ChatBubble(
+            message: data['message'],
+            isCurrentUser: isCurrentUser,
+          ),
         ],
       ),
     );
@@ -92,7 +93,13 @@ class ChatScreen extends StatelessWidget {
     return Row(
       children: [
         Expanded(child: MyTextField(controller: messageEditingController, hintText: 'message')),
-        IconButton(onPressed: sendMessage, icon: const Icon(Icons.arrow_upward)),
+        DecoratedBox(
+          decoration: BoxDecoration(color: Colors.orangeAccent.withOpacity(0.5), shape: BoxShape.circle),
+          child: IconButton(
+            onPressed: sendMessage,
+            icon: const Icon(Icons.arrow_upward),
+          ),
+        ),
       ],
     );
   }
