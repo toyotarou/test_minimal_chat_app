@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:test_minimal_chat_app/components/chat_bubble.dart';
-import 'package:test_minimal_chat_app/components/my_text_field.dart';
 
+import '../components/chat_bubble.dart';
+import '../components/my_text_field.dart';
 import '../services/auth/auth_service.dart';
 import '../services/chat/chat_service.dart';
 
@@ -22,16 +22,9 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(receiverEmail),
-      ),
-      body: Column(
-        children: [
-          Expanded(child: _buildMessageList()),
-          _buildUserInput(),
-          const SizedBox(height: 20),
-        ],
-      ),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(title: Text(receiverEmail), backgroundColor: Colors.transparent, foregroundColor: Colors.grey, elevation: 0),
+      body: Column(children: [Expanded(child: _buildMessageList()), _buildUserInput(), const SizedBox(height: 20)]),
     );
   }
 
@@ -57,11 +50,7 @@ class ChatScreen extends StatelessWidget {
           return const Text('Loading..');
         }
 
-        return ListView(
-          children: snapshot.data!.docs.map((doc) {
-            return _buildMessageListItem(doc: doc);
-          }).toList(),
-        );
+        return ListView(children: snapshot.data!.docs.map((doc) => _buildMessageListItem(doc: doc)).toList());
       },
     );
   }
@@ -78,12 +67,7 @@ class ChatScreen extends StatelessWidget {
       alignment: alignment,
       child: Column(
         crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          ChatBubble(
-            message: data['message'],
-            isCurrentUser: isCurrentUser,
-          ),
-        ],
+        children: [ChatBubble(message: data['message'], isCurrentUser: isCurrentUser)],
       ),
     );
   }
@@ -95,10 +79,7 @@ class ChatScreen extends StatelessWidget {
         Expanded(child: MyTextField(controller: messageEditingController, hintText: 'message')),
         DecoratedBox(
           decoration: BoxDecoration(color: Colors.orangeAccent.withOpacity(0.5), shape: BoxShape.circle),
-          child: IconButton(
-            onPressed: sendMessage,
-            icon: const Icon(Icons.arrow_upward),
-          ),
+          child: IconButton(onPressed: sendMessage, icon: const Icon(Icons.arrow_upward)),
         ),
       ],
     );

@@ -1,13 +1,12 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:test_minimal_chat_app/screens/chat_screen.dart';
-import 'package:test_minimal_chat_app/services/auth/auth_service.dart';
 
 import '../components/my_drawer.dart';
 import '../components/user_tile.dart';
-
+import '../services/auth/auth_service.dart';
 import '../services/chat/chat_service.dart';
+import 'chat_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -24,9 +23,8 @@ class HomeScreen extends StatelessWidget {
     _context = context;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('HomeScreen'),
-      ),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(title: const Text('HomeScreen'), backgroundColor: Colors.transparent, foregroundColor: Colors.grey, elevation: 0),
       drawer: const MyDrawer(),
       body: _buildUserList(),
     );
@@ -45,11 +43,7 @@ class HomeScreen extends StatelessWidget {
           return const Text('Loading..');
         }
 
-        return ListView(
-          children: snapshot.data!.map((userData) {
-            return _buildUserListItem(userData: userData);
-          }).toList(),
-        );
+        return ListView(children: snapshot.data!.map((userData) => _buildUserListItem(userData: userData)).toList());
       },
     );
   }
@@ -64,9 +58,7 @@ class HomeScreen extends StatelessWidget {
         onTap: () {
           Navigator.push(
             _context,
-            MaterialPageRoute(
-              builder: (context) => ChatScreen(receiverId: userData['uid'], receiverEmail: userData['email']),
-            ),
+            MaterialPageRoute(builder: (context) => ChatScreen(receiverId: userData['uid'], receiverEmail: userData['email'])),
           );
         },
       );
