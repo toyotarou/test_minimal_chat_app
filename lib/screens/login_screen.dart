@@ -49,14 +49,31 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: const Text('go to Regist'),
               ),
               const SizedBox(height: 25),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    emailEditingController.text = 'toyoda@test.com';
-                    passwordEditingController.text = 'password';
-                  });
-                },
-                child: const Text('Dummy'),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          emailEditingController.text = 'toyoda@test.com';
+                          passwordEditingController.text = 'password';
+                        });
+                      },
+                      child: const Text('toyoda'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          emailEditingController.text = 'flutter@test.com';
+                          passwordEditingController.text = 'password';
+                        });
+                      },
+                      child: const Text('flutter'),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

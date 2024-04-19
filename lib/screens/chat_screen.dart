@@ -24,12 +24,15 @@ class ChatScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(receiverEmail),
       ),
-      body: Column(
-        children: [
-          Expanded(child: _buildMessageList()),
-          _buildUserInput(),
-          const SizedBox(height: 20),
-        ],
+      body: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+        child: Column(
+          children: [
+            Expanded(child: _buildMessageList()),
+            _buildUserInput(),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
@@ -69,7 +72,19 @@ class ChatScreen extends StatelessWidget {
   Widget _buildMessageListItem({required DocumentSnapshot doc}) {
     final data = doc.data()! as Map<String, dynamic>;
 
-    return Text(data['message']);
+    final isCurrentUser = data['senderId'] == _authService.getCurrentUser()!.uid;
+
+    final alignment = isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
+
+    return Container(
+      alignment: alignment,
+      child: Column(
+        crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Text(data['message']),
+        ],
+      ),
+    );
   }
 
   ///
