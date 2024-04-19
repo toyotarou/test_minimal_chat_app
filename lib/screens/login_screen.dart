@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../auth/auth_service.dart';
 import '../components/my_button.dart';
 import '../components/my_text_field.dart';
+import '../services/auth/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.onPress});
